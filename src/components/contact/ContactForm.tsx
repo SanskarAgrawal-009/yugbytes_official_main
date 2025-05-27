@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,17 +27,24 @@ const ContactForm = () => {
     setLoading(true);
     
     try {
-      // In a real application, this would be an API call to your backend
-      // For this demo, we'll simulate a successful submission after a delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+
       toast({
         title: "Message sent successfully!",
         description: "We'll get back to you within 24 hours.",
         variant: "default",
       });
       
-      // Reset the form
       setFormData({
         name: "",
         email: "",

@@ -7,7 +7,7 @@ const portfolioItems = [
   {
     title: "NeuroScan AI",
     category: "ML Medical Project",
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742",
+    image: "neuroscan.png",
     description: "AI-powered MRI image analysis system with appointment scheduling, diagnosis, medical history, and dashboard features.",
     link: "https://neuro-scan-ai.vercel.app/"
   },

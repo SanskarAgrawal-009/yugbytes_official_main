@@ -10,7 +10,7 @@ const portfolioItems = [
     client: "Medical AI Initiative",
     category: "ML Medical Project",
     tags: ["medical", "ml", "research"],
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742",
+    image: "neuroscan.png",
     description: "AI-powered MRI image analysis system with appointment scheduling, diagnosis, medical history, and comprehensive dashboard features.",
     externalLink: "https://neuro-scan-ai.vercel.app/"
   },

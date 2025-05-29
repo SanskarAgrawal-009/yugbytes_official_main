@@ -120,7 +120,7 @@ const ServicesList = () => {
                 </div>
                 <div>
                   <div className="text-sm font-medium text-muted-foreground"></div>
-                  <div className="font-semibold">{service.price}</div>
+                  <div className="font-semibold"></div>
                 </div>
               </div>
               

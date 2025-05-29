@@ -5,10 +5,10 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import authRoutes from './server/routes/auth.js';
-import contactRoutes from './server/routes/contact.js';
-import portfolioRoutes from './server/routes/portfolio.js';
-import { verifyToken } from './server/middleware/auth.js';
+import authRoutes from './routes/auth.js';
+import contactRoutes from './routes/contact.js';
+import portfolioRoutes from './routes/portfolio.js';
+import { verifyToken } from './middleware/auth.js';
 
 dotenv.config();
 

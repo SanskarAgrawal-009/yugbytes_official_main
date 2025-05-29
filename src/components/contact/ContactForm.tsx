@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,44 +8,39 @@ import { useToast } from "@/hooks/use-toast";
 
 const ContactForm = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: "",
-  });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [loading, setLoading] = useState(false);
-  
+  const [success, setSuccess] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('http://localhost:5000/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(form),
       });
 
       if (!response.ok) {
         throw new Error('Failed to submit form');
       }
 
+      setSuccess(true);
       toast({
         title: "Message sent successfully!",
         description: "We'll get back to you within 24 hours.",
         variant: "default",
       });
       
-      setFormData({
+      setForm({
         name: "",
         email: "",
         phone: "",
@@ -133,7 +128,7 @@ const ContactForm = () => {
                 <Input 
                   id="name"
                   name="name"
-                  value={formData.name}
+                  value={form.name}
                   onChange={handleChange}
                   placeholder="Your name"
                   required
@@ -148,7 +143,7 @@ const ContactForm = () => {
                     id="email"
                     name="email"
                     type="email"
-                    value={formData.email}
+                    value={form.email}
                     onChange={handleChange}
                     placeholder="Your email"
                     required
@@ -160,7 +155,7 @@ const ContactForm = () => {
                   <Input 
                     id="phone"
                     name="phone"
-                    value={formData.phone}
+                    value={form.phone}
                     onChange={handleChange}
                     placeholder="Your phone number"
                     className="mt-1"
@@ -173,7 +168,7 @@ const ContactForm = () => {
                 <Input 
                   id="subject"
                   name="subject"
-                  value={formData.subject}
+                  value={form.subject}
                   onChange={handleChange}
                   placeholder="What is this regarding?"
                   required
@@ -186,7 +181,7 @@ const ContactForm = () => {
                 <Textarea 
                   id="message"
                   name="message"
-                  value={formData.message}
+                  value={form.message}
                   onChange={handleChange}
                   placeholder="Tell us about your project or inquiry..."
                   required
@@ -197,6 +192,7 @@ const ContactForm = () => {
               <Button type="submit" className="w-full button-gradient" disabled={loading}>
                 {loading ? "Sending..." : "Send Message"}
               </Button>
+              {success && <p className="text-green-500 mt-4">Message sent!</p>}
             </form>
           </div>
         </div>

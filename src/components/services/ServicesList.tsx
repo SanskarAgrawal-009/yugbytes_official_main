@@ -17,7 +17,6 @@ const services = [
 "Domain + hosting help (if needed)",
     ],
     turnaround: "3-4 days",
-    price: "Starting from ₹10,000 and upto ₹30,000",
     imageSrc: "https://images.unsplash.com/photo-1527576539890-dfa815648363",
   },
   {
@@ -38,7 +37,6 @@ const services = [
 
     ],
     turnaround: "5-10 days",
-    price: "Starting from ₹30,000 and upto ₹80,000",
     imageSrc: "https://images.unsplash.com/photo-1487958449943-2429e8be8625",
   },
   {
@@ -58,7 +56,7 @@ const services = [
       "Admin dashboard and training",
     ],
     turnaround: "20-25 days",
-    price: "Starting from ₹55,000 and upto ₹2,00,000",
+
     imageSrc: "https://images.unsplash.com/photo-1487958449943-2429e8be8625",
   },
   {
@@ -76,7 +74,7 @@ const services = [
       "Integration with existing systems",
     ],
     turnaround: "Will vary based on complexity",
-    price: "Starting from ₹1,00,000 and upto ₹5,00,000",
+    
     imageSrc: "neuroscan.png", 
   },
 ];
@@ -121,7 +119,7 @@ const ServicesList = () => {
                   <div className="font-semibold">{service.turnaround}</div>
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-muted-foreground">Pricing</div>
+                  <div className="text-sm font-medium text-muted-foreground"></div>
                   <div className="font-semibold">{service.price}</div>
                 </div>
               </div>
@@ -140,14 +138,24 @@ const ServicesList = () => {
                 alt={service.title} 
                 className="rounded-lg shadow-lg w-full object-cover h-80"
               />
-              {index % 2 === 0 && (
+              {index  === 0 && (
                 <div className="absolute -bottom-6 -right-6 bg-white p-6 shadow-lg rounded-lg border border-border">
-                  <div className="font-bold text-2xl gradient-text">{service.price}</div>
+                  <div className="font-bold text-2xl gradient-text">Portfolio</div>
                 </div>
               )}
-              {index % 2 === 1 && (
+              {index === 1 && (
                 <div className="absolute -top-6 -left-6 bg-white p-6 shadow-lg rounded-lg border border-border">
-                  <div className="font-bold text-2xl gradient-text">{service.price}</div>
+                  <div className="font-bold text-2xl gradient-text">business site</div>
+                </div>
+              )}
+              {index  === 2 && (
+                <div className="absolute -bottom-6 -right-6 bg-white p-6 shadow-lg rounded-lg border border-border">
+                  <div className="font-bold text-2xl gradient-text">E-commerrce site </div>
+                </div>
+              )}
+              {index  === 3 && (
+                <div className="absolute -top-6 -left-6 bg-white p-6 shadow-lg rounded-lg border border-border  ">
+                  <div className="font-bold text-2xl gradient-text">SaaS</div>
                 </div>
               )}
             </div>

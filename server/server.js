@@ -19,8 +19,8 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  mode: 'no-cors',
-  origin: process.env.NODE_ENV === 'production' ? process.env.FRONTEND_URL:"https://yugbytes.com",
+  mode: 'cors',
+  origin:"https://yugbytes.com",
   credentials: true
 }));
 app.use(express.json());

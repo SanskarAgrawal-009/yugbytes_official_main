@@ -1,6 +1,8 @@
 
 import { ArrowRight, Calendar, FileText, Laptop, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
+// Update the import path below to the correct relative path based on your folder structure.
+// For example, if ServicesSection.tsx is in src/components/home and button.tsx is in src/components/ui:
+import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 
 const services = [
@@ -9,28 +11,27 @@ const services = [
     title: "Portfolio Websites",
     description: "Showcase your skills, projects, and achievements with a custom-designed personal portfolio website.",
     turnaround: "3-5 days",
-    price: "Starting from ₹10,000",
   },
   {
     icon: <Laptop className="h-10 w-10 text-primary" />,
     title: "Small Business Websites",
     description: "Get your business online with a professional website that highlights your services and engages customers.",
     turnaround: "5-10 days",
-    price: "Starting from ₹30,000",
+
   },
   {
     icon: <FileText className="h-10 w-10 text-primary" />,
     title: "E-commerce Websites",
     description: "Launch your online store with a fully functional e-commerce website, complete with secure payment options.",
     turnaround: "20-25 days",
-    price: "Starting from ₹50,000",
+
   },
   {
     icon: <Calendar className="h-10 w-10 text-primary" />,
     title: "Custom Web Applications/SaaS",
     description: "Develop tailored web applications or SaaS solutions to meet specific business needs, from concept to deployment.",
     turnaround: "1-3 months",
-    price: "Starting from ₹1,00,000",
+
   },
 ];
 
@@ -55,7 +56,7 @@ const ServicesSection = () => {
               <p className="text-muted-foreground mb-4">{service.description}</p>
               <div className="mt-auto">
                 <div className="text-sm text-primary font-medium">{service.turnaround}</div>
-                <div className="text-sm font-bold">{service.price}</div>
+                <div className="text-sm font-bold"></div>
               </div>
             </div>
           ))}

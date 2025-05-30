@@ -5,22 +5,20 @@ import { useState, useEffect } from "react";
 const testimonials = [
   {
     name: "Priya Sharma",
-    role: "Computer Science Student",
-    image: "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
-    content: "Yugbytes built my portfolio site in just 3 days! The design perfectly showcases my projects and has helped me stand out during job interviews. Highly recommend their services to fellow students!",
+    role: "founder of Priya's Designs",
+   
+    content: "I choose yugbytes for my e-commerce website, and I couldn't be happier. The team was professional, responsive, and delivered a stunning site that has significantly boosted my online sales. Highly recommend!",
     rating: 5,
   },
   {
     name: "Rahul Mehra",
     role: "UX Designer",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
     content: "As someone who works in design, I had high expectations for my personal website. YugBytes didn't just meet them but exceeded them. The final result is clean, professional, and perfectly represents my personal brand.",
     rating: 5,
   },
   {
     name: "Aisha Patel",
     role: "PhD Researcher",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956",
     content: "I needed a website to showcase my research work and academic publications. YugBytes delivered an organized, professional platform that impressed my department. The process was smooth from start to finish.",
     rating: 4,
   },
@@ -55,11 +53,7 @@ const TestimonialsSection = () => {
                 <div key={index} className="w-full flex-shrink-0 px-4">
                   <div className="bg-white rounded-lg shadow-md p-8 text-center">
                     <div className="flex justify-center mb-6">
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name} 
-                        className="w-20 h-20 rounded-full object-cover border-4 border-primary/20"
-                      />
+                      
                     </div>
                     <div className="flex justify-center gap-1 mb-4">
                       {[...Array(5)].map((_, i) => (

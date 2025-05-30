@@ -40,6 +40,14 @@ app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 
+app.get('/', (req, res) => {
+  res.send({
+    activestatus: 'Server is running',
+    error: false,
+    message: 'Welcome to Yugbytes API',
+  }
+  )})
+
 // Admin route protection
 app.get('/api/admin/*', verifyToken, (req, res, next) => {
   if (req.user.role !== 'admin') {

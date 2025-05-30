@@ -21,7 +21,7 @@ const ContactForm = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('https://yugbytes-official-main.vercel.app/api/contact', {
+      const response = await fetch('https://yugbytes-official-main-2.onrender.com/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

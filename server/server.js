@@ -27,9 +27,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(join(__dirname, 'dist')));
-}
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static(join(__dirname, 'dist')));
+// }
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

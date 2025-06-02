@@ -1,46 +1,125 @@
 import express from 'express';
+import multer from 'multer';
+import multerS3 from 'multer-s3';
+import aws from 'aws-sdk';
+import path from 'path';
 import Portfolio from '../models/Portfolio.js';
 import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get all portfolio items
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.AWS_S3_BUCKET_NAME,
+    acl: 'public-read',
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  })
+});
+
+// Get all portfolio projects, with optional category filter
 router.get('/', async (req, res) => {
   try {
-    const items = await Portfolio.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: items });
+    const filter = {};
+    if (req.query.category) {
+      filter.category = req.query.category;
+    }
+    const projects = await Portfolio.find(filter).sort({ createdAt: -1 });
+    res.json({ success: true, data: projects });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching portfolio items' });
+    res.status(500).json({ success: false, message: 'Error fetching portfolio projects' });
   }
 });
 
-// Add new portfolio item (admin only)
-router.post('/', verifyToken, async (req, res) => {
+// Add new project (admin only)
+router.post('/', verifyToken, upload.single('image'), async (req, res) => {
   try {
-    const item = await Portfolio.create(req.body);
-    res.status(201).json({ success: true, data: item });
+    const { title, category, client, description, tags, externalLink, showOnHomepage } = req.body;
+    const image = req.file ? req.file.location : null;
+
+    if (!title || !category || !client || !description || !image) {
+      return res.status(400).json({ success: false, message: 'Missing required fields' });
+    }
+
+    const tagsArray = tags ? (Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim())) : [];
+
+    const project = new Portfolio({
+      title,
+      category,
+      client,
+      description,
+      image,
+      tags: tagsArray,
+      externalLink,
+      showOnHomepage: showOnHomepage === 'true' || showOnHomepage === true,
+    });
+
+    await project.save();
+    res.status(201).json({ success: true, data: project });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error creating portfolio item' });
+    console.error('Error adding project:', error);
+    res.status(500).json({ success: false, message: 'Error adding project' });
   }
 });
 
-// Update portfolio item (admin only)
-router.put('/:id', verifyToken, async (req, res) => {
+// Update project (admin only)
+router.put('/:id', verifyToken, upload.single('image'), async (req, res) => {
   try {
-    const item = await Portfolio.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.json({ success: true, data: item });
+    const { id } = req.params;
+    const { title, category, client, description, tags, externalLink, showOnHomepage } = req.body;
+    const updateData = {
+      title,
+      category,
+      client,
+      description,
+      externalLink,
+      showOnHomepage: showOnHomepage === 'true' || showOnHomepage === true,
+    };
+
+    if (tags) {
+      updateData.tags = Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim());
+    }
+
+    if (req.file) {
+      updateData.image = req.file.location;
+    }
+
+    const updatedProject = await Portfolio.findByIdAndUpdate(id, updateData, { new: true });
+    if (!updatedProject) {
+      return res.status(404).json({ success: false, message: 'Project not found' });
+    }
+
+    res.json({ success: true, data: updatedProject });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error updating portfolio item' });
+    console.error('Error updating project:', error);
+    res.status(500).json({ success: false, message: 'Error updating project' });
   }
 });
 
-// Delete portfolio item (admin only)
+// Delete project (admin only)
 router.delete('/:id', verifyToken, async (req, res) => {
   try {
-    await Portfolio.findByIdAndDelete(req.params.id);
-    res.json({ success: true, message: 'Portfolio item deleted' });
+    const { id } = req.params;
+    const deletedProject = await Portfolio.findByIdAndDelete(id);
+    if (!deletedProject) {
+      return res.status(404).json({ success: false, message: 'Project not found' });
+    }
+    res.json({ success: true, message: 'Project deleted' });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Error deleting portfolio item' });
+    console.error('Error deleting project:', error);
+    res.status(500).json({ success: false, message: 'Error deleting project' });
   }
 });
 

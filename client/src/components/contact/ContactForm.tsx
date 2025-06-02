@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input.tsx";
+import { Textarea } from "@/components/ui/Textarea";
 import { Label } from "@/components/ui/label";
 import { Calendar, Mail, MessageSquare, Phone, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -21,7 +21,7 @@ const ContactForm = () => {
     setLoading(true);
     
     try {
-      const response = await fetch('https://yugbytes-official-main-2.onrender.com/api/contact', {
+      const response = await fetch('http://localhost:5000/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

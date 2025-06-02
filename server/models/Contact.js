@@ -6,7 +6,8 @@ const contactSchema = new mongoose.Schema(
     email: { type: String, required: true },
     phone: { type: String, required: true },
     subject: { type: String, required: true }, // Added subject field
-    message: { type: String, required: true }
+    message: { type: String, required: true },
+    status: { type: String, default: "" }
   },
   { timestamps: true }
 );

@@ -1,14 +1,13 @@
-import express from 'express';
+  import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import authRoutes from './routes/auth.js';
 import contactRoutes from './routes/contact.js';
+import authRoutes from './routes/auth.js';
 import portfolioRoutes from './routes/portfolio.js';
-import { verifyToken } from './middleware/auth.js';
 
 dotenv.config();
 
@@ -20,16 +19,11 @@ const app = express();
 // Middleware
 app.use(cors({
   mode: 'cors',
-  origin:"https://yugbytes.com",
+  origin: process.env.CORS_ORIGIN || "http://localhost:8080",
   credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
-
-// Serve static files in production
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(join(__dirname, 'dist')));
-// }
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -37,6 +31,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Routes
+
 app.use('/api/auth', authRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/portfolio', portfolioRoutes);
@@ -46,15 +41,7 @@ app.get('/', (req, res) => {
     activestatus: 'Server is running',
     error: false,
     message: 'Welcome to Yugbytes API',
-  }
-  )})
-
-// Admin route protection
-app.get('/api/admin/*', verifyToken, (req, res, next) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Access denied' });
-  }
-  next();
+  });
 });
 
 // Handle SPA routing in production
@@ -66,5 +53,11 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+// Error logging middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ success: false, message: 'Internal Server Error' });
 });

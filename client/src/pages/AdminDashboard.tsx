@@ -66,7 +66,7 @@ const AdminDashboard = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/contact', {
+      const res = await fetch('https://yugbytes-official-main-2.onrender.com/api/contact', {
         credentials: 'include',
       });
       const data = await res.json();
@@ -89,7 +89,7 @@ const AdminDashboard = () => {
   // Fetch portfolio
   const fetchPortfolio = async () => {
     try {
-      const url = portfolioFilter ? `http://localhost:5000/api/portfolio?category=${portfolioFilter}` : 'http://localhost:5000/api/portfolio';
+      const url = portfolioFilter ? `https://yugbytes-official-main-2.onrender.com/api/portfolio?category=${portfolioFilter}` : 'http://localhost:5000/api/portfolio';
       const res = await fetch(url, { credentials: 'include' });
       const data = await res.json();
       if (data.success) {
@@ -140,7 +140,7 @@ const AdminDashboard = () => {
         formData.append('image', form.image);
       }
 
-      const url = editingProject ? `http://localhost:5000/api/portfolio/${editingProject._id}` : 'http://localhost:5000/api/portfolio';
+      const url = editingProject ? `https://yugbytes-official-main-2.onrender.com/api/portfolio/${editingProject._id}` : 'http://localhost:5000/api/portfolio';
       const method = editingProject ? 'PUT' : 'POST';
 
       const res = await fetch(url, {
@@ -196,7 +196,7 @@ const AdminDashboard = () => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/${id}`, {
+      const res = await fetch(`https://yugbytes-official-main-2.onrender.com/api/portfolio/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -215,7 +215,7 @@ const AdminDashboard = () => {
   // Toggle showOnHomepage
   const handleToggleShow = async (project, newValue: boolean) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/portfolio/${project._id}`, {
+      const res = await fetch(`https://yugbytes-official-main-2.onrender.com/api/portfolio/${project._id}`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -252,7 +252,7 @@ const AdminDashboard = () => {
   const handleStatusChange = async (id: string, value: string) => {
     setContactStatus(prev => ({ ...prev, [id]: value }));
     try {
-      const res = await fetch(`http://localhost:5000/api/contact/${id}/status`, {
+      const res = await fetch(`https://yugbytes-official-main-2.onrender.com/api/contact/${id}/status`, {
         method: 'PUT',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

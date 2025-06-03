@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 
 interface Project {
   _id: string;
-  image: string;
+  image?: string;
+  imageUrl?: string;
   title: string;
   category: string;
   description: string;
@@ -18,7 +19,7 @@ const PortfolioSection = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/portfolio?showOnHomepage=true");
+        const res = await fetch("https://yugbytes-official-main-2.onrender.com/api/portfolio?showOnHomepage=true");
         const data = await res.json();
         if (data.success) {
           setProjects(data.data);
@@ -47,7 +48,7 @@ const PortfolioSection = () => {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                  src={item.imageUrl ? item.imageUrl : (item.image && item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`)}
                   alt={item.title}
                   className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
                 />

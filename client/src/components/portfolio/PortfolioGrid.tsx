@@ -38,8 +38,8 @@ const PortfolioGrid = () => {
       try {
         const url =
           filter === "all"
-            ? "http://localhost:5000/api/portfolio"
-            : `http://localhost:5000/api/portfolio?category=${filter}`;
+            ? "https://yugbytes-official-main-2.onrender.com/api/portfolio"
+            : `https://yugbytes-official-main-2.onrender.com/api/portfolio?category=${filter}`;
         const res = await fetch(url);
         const data = await res.json();
         if (data.success) {
@@ -80,16 +80,18 @@ const PortfolioGrid = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedItems.map((item, index) => {
-            // Prefer imageUrl, fallback to image, fallback to placeholder
+            // Updated image source logic to handle base64 data URLs from MongoDB
             const imgSrc =
-              item.imageUrl && item.imageUrl.startsWith("http")
+              item.imageUrl && item.imageUrl.startsWith("data:")
+                ? item.imageUrl
+                : item.imageUrl && item.imageUrl.startsWith("http")
                 ? item.imageUrl
                 : item.imageUrl
-                ? `http://localhost:5000${item.imageUrl}`
+                ? `https://yugbytes-official-main-2.onrender.com${item.imageUrl}`
                 : item.image && item.image.startsWith("http")
                 ? item.image
                 : item.image
-                ? `http://localhost:5000${item.image}`
+                ? `https://yugbytes-official-main-2.onrender.com${item.image}`
                 : "https://via.placeholder.com/400x300?text=No+Image";
             return (
               <div

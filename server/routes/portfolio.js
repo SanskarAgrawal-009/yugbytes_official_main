@@ -17,6 +17,9 @@ router.get('/', async (req, res) => {
     if (req.query.category) {
       filter.category = req.query.category;
     }
+    if (req.query.showOnHomepage !== undefined) {
+      filter.showOnHomepage = req.query.showOnHomepage === 'true';
+    }
     const projects = await Portfolio.find(filter).sort({ createdAt: -1 });
 
     // Convert image buffer to base64 string for each project

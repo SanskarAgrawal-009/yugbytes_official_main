@@ -8,7 +8,6 @@ import { useToast } from '../hooks/use-toast';
 import ThemeToggle from '../components/ui/theme-toggle';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '../components/ui/dialog';
 
-
 const AdminDashboard = () => {
   const { toast } = useToast();
 
@@ -67,7 +66,6 @@ const AdminDashboard = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
-
       const res = await fetch('https://yugbytes-official-main-2.onrender.com/api/contact', {
         method: 'GET',
         credentials: 'include',
@@ -76,7 +74,7 @@ const AdminDashboard = () => {
       if (data.success) {
         setContacts(data.data);
         // Initialize status state
-        const statusMap: { [id: string]: string } = {}; 
+        const statusMap: { [id: string]: string } = {};
         data.data.forEach((c: any) => {
           statusMap[c._id] = c.status || "";
         });
@@ -535,52 +533,63 @@ const AdminDashboard = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Image</TableHead>
                 <TableHead>Title</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Client</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Show on Homepage</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>Action</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {portfolio.map(project => (
-                <TableRow key={project._id}>
-                  <TableCell>
-                    {project.imageUrl ? (
-                      <img
-                        src={project.imageUrl}
-                        alt={project.title}
-                        className="w-16 h-16 object-cover rounded border"
-                      />
-                    ) : (
-                      'No Image'
-                    )}
-                  </TableCell>
-                  <TableCell>{project.title}</TableCell>
-                  <TableCell>{project.category}</TableCell>
-                  <TableCell>{project.client}</TableCell>
-                  <TableCell>{project.description}</TableCell>
-                  <TableCell>
-                    <Button
-                      size="sm"
-                      variant={project.showOnHomepage ? "secondary" : "outline"}
-                      className={project.showOnHomepage ? "text-green-700 border-green-600" : "text-gray-600"}
-                      onClick={() => handleToggleShow(project, !project.showOnHomepage)}
-                    >
-                      {project.showOnHomepage ? "Enabled" : "Disabled"}
-                    </Button>
-                  </TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
-                      Edit
-                    </Button>{' '}
-                    <Button variant="destructive" size="sm" onClick={() => handleDelete(project._id)}>
-                      Delete
-                    </Button>
+              {portfolio.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    No projects found.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                portfolio.map(project => (
+                  <TableRow key={project._id}>
+                    <TableCell className="w-24 h-24 p-1">
+                      {project.imageUrl ? (
+                        <img
+                          src={project.imageUrl}
+                          alt={project.title}
+                          className="w-full h-full object-cover rounded border border-border"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-muted text-muted-foreground rounded border border-border">
+                          No Image
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell>{project.title}</TableCell>
+                    <TableCell>{project.category}</TableCell>
+                    <TableCell>{project.client}</TableCell>
+                    <TableCell>{project.description}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={project.showOnHomepage ? "secondary" : "outline"}
+                        className={project.showOnHomepage ? "text-green-700 border-green-600" : "text-gray-600"}
+                        onClick={() => handleToggleShow(project, !project.showOnHomepage)}
+                      >
+                        {project.showOnHomepage ? "Enabled" : "Disabled"}
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(project)}>
+                        Edit
+                      </Button>{' '}
+                      <Button variant="destructive" size="sm" onClick={() => handleDelete(project._id)}>
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TabsContent>
@@ -589,5 +598,5 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
 
+export default AdminDashboard;

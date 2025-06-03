@@ -8,6 +8,7 @@ import { useToast } from '../hooks/use-toast';
 import ThemeToggle from '../components/ui/theme-toggle';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose, DialogTrigger } from '../components/ui/dialog';
 
+
 const AdminDashboard = () => {
   const { toast } = useToast();
 
@@ -66,14 +67,16 @@ const AdminDashboard = () => {
   // Fetch contacts
   const fetchContacts = async () => {
     try {
+
       const res = await fetch('https://yugbytes-official-main-2.onrender.com/api/contact', {
+        method: 'GET',
         credentials: 'include',
       });
       const data = await res.json();
       if (data.success) {
         setContacts(data.data);
         // Initialize status state
-        const statusMap: { [id: string]: string } = {};
+        const statusMap: { [id: string]: string } = {}; 
         data.data.forEach((c: any) => {
           statusMap[c._id] = c.status || "";
         });
@@ -89,7 +92,7 @@ const AdminDashboard = () => {
   // Fetch portfolio
   const fetchPortfolio = async () => {
     try {
-      const url = portfolioFilter ? `https://yugbytes-official-main-2.onrender.com/api/portfolio?category=${portfolioFilter}` : 'http://localhost:5000/api/portfolio';
+      const url = portfolioFilter ? `https://yugbytes-official-main-2.onrender.com/api/portfolio?category=${portfolioFilter}` : 'https://yugbytes-official-main-2.onrender.com/api/portfolio';
       const res = await fetch(url, { credentials: 'include' });
       const data = await res.json();
       if (data.success) {

@@ -19,7 +19,9 @@ const app = express();
 // Middleware
 app.use(cors({
   mode: 'cors',
-  origin: process.env.CORS_ORIGIN || "http://localhost:8080",
+  origin: "https://yugbytes.com",
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 app.use(express.json());

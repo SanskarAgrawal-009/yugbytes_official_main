@@ -143,7 +143,7 @@ const AdminDashboard = () => {
         formData.append('image', form.image);
       }
 
-      const url = editingProject ? `https://yugbytes-official-main-2.onrender.com/api/portfolio/${editingProject._id}` : 'http://localhost:5000/api/portfolio';
+      const url = editingProject ? `https://yugbytes-official-main-2.onrender.com/api/portfolio/${editingProject._id}` : 'https://yugbytes-official-main-2.onrender.com/api/portfolio';
       const method = editingProject ? 'PUT' : 'POST';
 
       const res = await fetch(url, {

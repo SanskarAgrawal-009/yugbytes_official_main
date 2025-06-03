@@ -21,9 +21,14 @@ const portfolioSchema = new mongoose.Schema({
     required: true,
   },
   image: {
-    data: Buffer,
-    contentType: String,
-    required: true,
+    data: {
+      type: Buffer,
+      required: true,
+    },
+    contentType: {
+      type: String,
+      required: true,
+    },
   },
   tags: [{
     type: String,

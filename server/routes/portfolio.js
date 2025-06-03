@@ -2,40 +2,13 @@ import 'dotenv/config';
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { Upload } from '@aws-sdk/lib-storage';
 import Portfolio from '../models/Portfolio.js';
 import { verifyToken } from '../middleware/auth.js';
-import crypto from 'crypto';
 
 const router = express.Router();
 
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-
-async function uploadToS3(buffer, filename, mimetype) {
-  const upload = new Upload({
-    client: s3Client,
-    params: {
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: filename,
-      Body: buffer,
-      ContentType: mimetype,
-      ACL: 'public-read',
-    },
-  });
-
-  await upload.done();
-  return `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${filename}`;
-}
 
 // Get all portfolio projects, with optional category filter
 router.get('/', async (req, res) => {
@@ -45,7 +18,19 @@ router.get('/', async (req, res) => {
       filter.category = req.query.category;
     }
     const projects = await Portfolio.find(filter).sort({ createdAt: -1 });
-    res.json({ success: true, data: projects });
+
+    // Convert image buffer to base64 string for each project
+    const projectsWithImages = projects.map(project => {
+      const projectObj = project.toObject();
+      if (project.image && project.image.data) {
+        projectObj.imageUrl = `data:${project.image.contentType};base64,${project.image.data.toString('base64')}`;
+      } else {
+        projectObj.imageUrl = null;
+      }
+      return projectObj;
+    });
+
+    res.json({ success: true, data: projectsWithImages });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error fetching portfolio projects' });
   }
@@ -60,9 +45,6 @@ router.post('/', verifyToken, upload.single('image'), async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing required fields' });
     }
 
-    const uniqueSuffix = crypto.randomBytes(16).toString('hex') + path.extname(req.file.originalname);
-    const imageUrl = await uploadToS3(req.file.buffer, uniqueSuffix, req.file.mimetype);
-
     const tagsArray = tags ? (Array.isArray(tags) ? tags : tags.split(',').map(tag => tag.trim())) : [];
 
     const project = new Portfolio({
@@ -70,7 +52,10 @@ router.post('/', verifyToken, upload.single('image'), async (req, res) => {
       category,
       client,
       description,
-      image: imageUrl,
+      image: {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      },
       tags: tagsArray,
       externalLink,
       showOnHomepage: showOnHomepage === 'true' || showOnHomepage === true,
@@ -103,9 +88,10 @@ router.put('/:id', verifyToken, upload.single('image'), async (req, res) => {
     }
 
     if (req.file) {
-      const uniqueSuffix = crypto.randomBytes(16).toString('hex') + path.extname(req.file.originalname);
-      const imageUrl = await uploadToS3(req.file.buffer, uniqueSuffix, req.file.mimetype);
-      updateData.image = imageUrl;
+      updateData.image = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
     }
 
     const updatedProject = await Portfolio.findByIdAndUpdate(id, updateData, { new: true });

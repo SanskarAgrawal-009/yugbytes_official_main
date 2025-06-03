@@ -462,7 +462,7 @@ const AdminDashboard = () => {
                           value={form.description}
                           onChange={handleChange}
                           required
-                          className="w-full border rounded p-2 mt-1 focus:ring-2 focus:ring-primary transition min-h-[120px]"
+                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition min-h-[120px]"
                           placeholder="Describe your project..."
                         />
                       </div>
@@ -546,6 +546,17 @@ const AdminDashboard = () => {
             <TableBody>
               {portfolio.map(project => (
                 <TableRow key={project._id}>
+                  <TableCell>
+                    {project.imageUrl ? (
+                      <img
+                        src={project.imageUrl}
+                        alt={project.title}
+                        className="w-16 h-16 object-cover rounded border"
+                      />
+                    ) : (
+                      'No Image'
+                    )}
+                  </TableCell>
                   <TableCell>{project.title}</TableCell>
                   <TableCell>{project.category}</TableCell>
                   <TableCell>{project.client}</TableCell>

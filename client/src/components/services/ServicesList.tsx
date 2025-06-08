@@ -145,12 +145,12 @@ const ServicesList = () => {
               )}
               {index === 1 && (
                 <div className="absolute -top-6 -left-6 bg-white p-6 shadow-lg rounded-lg border border-border">
-                  <div className="font-bold text-2xl gradient-text">business site</div>
+                  <div className="font-bold text-2xl gradient-text">Business Site</div>
                 </div>
               )}
               {index  === 2 && (
                 <div className="absolute -bottom-6 -right-6 bg-white p-6 shadow-lg rounded-lg border border-border">
-                  <div className="font-bold text-2xl gradient-text">E-commerrce site </div>
+                  <div className="font-bold text-2xl gradient-text">E-Commerrce site </div>
                 </div>
               )}
               {index  === 3 && (

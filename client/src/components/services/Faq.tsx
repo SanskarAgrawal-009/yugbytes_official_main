@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     question: "What is your pricing structure?",
-    answer: "We offer transparent pricing starting at ₹999 for consultations, ₹2,999 for resume/landing pages, ₹3,999 for academic project websites, and ₹4,999 for portfolio websites. Each project is unique, so the final price depends on specific requirements and features needed."
+    answer: "We offer competitive pricing based on the type of website you need and its complexity. Our basic packages start at an afordable price for the particular amount you need to get a quote from us which can fluctuate according to your need and functionalities which you want to add in your website. We also offer custom packages for more complex projects."
   },
   {
     question: "Do you offer student discounts?",
